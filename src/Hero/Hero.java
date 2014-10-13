@@ -1,4 +1,4 @@
-package characters;
+package Hero;
 
 import java.awt.Color;
 

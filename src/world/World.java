@@ -1,77 +1,60 @@
 package world;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import characters.*;
+import creature.*;
+import Hero.HeroContainer;
+import asciiPanel.AsciiPanel;
 
 public class World {
-	List<Floor> floors;
-	Floor currentFloor;
-	private int currentFloorNumber;
-	Hero hero;
+	FloorContainer floorContainer;
+	CreatureContainer creatureContainer;
+	HeroContainer heroContainer;
 	
-	public World () {
-		floors = new ArrayList<Floor>();
+	private int currentFloorNumber;
+	private int screenWidth;
+	private int screenHeight;
+	private int left;
+	private int top;
+	
+	public World (int screenWidth, int screenHeight) {
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		
 		currentFloorNumber = 0;
-		createInitialFloor();
-		currentFloor = floors.get(currentFloorNumber);
-		createHero();
+		floorContainer = new FloorContainer();
+		currentFloorNumber = floorContainer.descend(currentFloorNumber, FloorTypeEnum.CAVE);
+		
+		creatureContainer = new CreatureContainer();
+		creatureContainer.generateCreatures(8, floorContainer.getFloor(currentFloorNumber - 1), currentFloorNumber);
+		
+		heroContainer = new HeroContainer();
 	}
 
-	public Floor getCurrentFloor() {
-		return currentFloor;
-	}
-	
-	public int getCurrentFloorNumber() {
-		return currentFloorNumber;
+	public void move(int mx, int my) {
+		heroContainer.moveHero(floorContainer.getFloor(currentFloorNumber - 1), mx, my);
+		creatureContainer.move(floorContainer);
 	}
 	
 	public void descend() {
-		if (floors.size() > currentFloorNumber + 1) {
-			currentFloor = floors.get(++currentFloorNumber);
-		} else {
-			descendToNewFloor();
-		}
-	}
-	
-	public void moveHero(int mx, int my) {
-		TileEnum tile = currentFloor.getTile(hero.getX() + mx, hero.getY() + my);
-		if (tile.isGround()){
-			hero.setX(Math.max(0, Math.min(hero.getX() + mx, currentFloor.getWidth() - 1)));
-	    	hero.setY(Math.max(0, Math.min(hero.getY() + my, currentFloor.getHeight() - 1)));
-	    } else if (tile.isDiggable()) {
-	        currentFloor.dig(hero.getX() + mx, hero.getY() + my);
-	    }
+		currentFloorNumber = floorContainer.descend(currentFloorNumber, FloorTypeEnum.CAVE);
+		creatureContainer.generateCreatures(8, floorContainer.getFloor(currentFloorNumber - 1), currentFloorNumber);
 	}
 
-	public int getHeroX() {
-		return hero.getX();
+	public void display(AsciiPanel terminal) {
+		left = getScrollX();
+        top = getScrollY();
+        
+        floorContainer.displayTiles(terminal, left, top, screenWidth, screenHeight, currentFloorNumber);
+        creatureContainer.displayCreatures(terminal, left, top, currentFloorNumber);
+        heroContainer.displayHero(terminal, left, top);
 	}
 	
-	public int getHeroY() {
-		return hero.getY();
-	}
-	
-	public char getHeroGlyph() {
-		return hero.getGlyph();
-	}
-
-	private void descendToNewFloor() {
-		floors.add(new Floor(FloorTypeEnum.CAVE));
-		currentFloor = floors.get(++currentFloorNumber);
-	}
-	
-	private void createInitialFloor() {
-		floors.add(new Floor(FloorTypeEnum.CAVE));
-	}
-	
-	private void createHero() {
-		hero = new Hero();
-		hero.setX(1);
-		hero.setY(1);
-	}
+	public int getScrollX() {
+        return Math.max(0, Math.min(heroContainer.getHeroX() - screenWidth / 2, floorContainer.getFloor(currentFloorNumber - 1).getWidth() - screenWidth));
+    }
+    
+    public int getScrollY() {
+        return Math.max(0, Math.min(heroContainer.getHeroY() - screenHeight / 2, floorContainer.getFloor(currentFloorNumber - 1).getHeight() - screenHeight));
+    }
 	
 	
-
 }

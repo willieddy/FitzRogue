@@ -8,7 +8,6 @@ import characters.*;
 public class World {
 	List<Floor> floors;
 	Floor currentFloor;
-	FloorTypeEnum floorType;
 	private int currentFloorNumber;
 	Hero hero;
 	
@@ -24,8 +23,8 @@ public class World {
 		return currentFloor;
 	}
 	
-	public char getCurrentFloorNumber() {
-		return (char)(((int)'0')+currentFloorNumber);
+	public int getCurrentFloorNumber() {
+		return currentFloorNumber;
 	}
 	
 	public void descend() {
@@ -51,7 +50,7 @@ public class World {
 	}
 	
 	public int getHeroY() {
-		return hero.getX();
+		return hero.getY();
 	}
 	
 	public char getHeroGlyph() {

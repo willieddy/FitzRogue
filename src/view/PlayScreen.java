@@ -25,17 +25,17 @@ public class PlayScreen extends StartScreen implements Screen {
 	        case KeyEvent.VK_ESCAPE: return new LoseScreen();
 	        case KeyEvent.VK_ENTER: return new WinScreen();
 	        case KeyEvent.VK_LEFT:
-	        case KeyEvent.VK_H: world.move(-1, 0); break;
+	        case KeyEvent.VK_H: world.update(-1, 0); break;
 	        case KeyEvent.VK_RIGHT:
-	        case KeyEvent.VK_L: world.move( 1, 0); break;
+	        case KeyEvent.VK_L: world.update( 1, 0); break;
 	        case KeyEvent.VK_UP:
-	        case KeyEvent.VK_K: world.move( 0,-1); break;
+	        case KeyEvent.VK_K: world.update( 0,-1); break;
 	        case KeyEvent.VK_DOWN:
-	        case KeyEvent.VK_J: world.move( 0, 1); break;
-	        case KeyEvent.VK_Y: world.move(-1,-1); break;
-	        case KeyEvent.VK_U: world.move( 1,-1); break;
-	        case KeyEvent.VK_B: world.move(-1, 1); break;
-	        case KeyEvent.VK_N: world.move( 1, 1); break;
+	        case KeyEvent.VK_J: world.update( 0, 1); break;
+	        case KeyEvent.VK_Y: world.update(-1,-1); break;
+	        case KeyEvent.VK_U: world.update( 1,-1); break;
+	        case KeyEvent.VK_B: world.update(-1, 1); break;
+	        case KeyEvent.VK_N: world.update( 1, 1); break;
 	        case KeyEvent.VK_X: world.descend(); break;
         }
      

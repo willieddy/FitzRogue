@@ -29,9 +29,13 @@ public class World {
 		heroContainer = new HeroContainer();
 	}
 
-	public void move(int mx, int my) {
-		heroContainer.moveHero(floorContainer.getFloor(currentFloorNumber - 1), mx, my);
-		creatureContainer.move(floorContainer);
+	public void update(int mx, int my) {
+		if (creatureContainer.searchCreature(heroContainer.getHeroX() + mx, heroContainer.getHeroY() + my, currentFloorNumber) != null) {
+			creatureContainer.attackCreature(creatureContainer.searchCreature(heroContainer.getHeroX() + mx, heroContainer.getHeroY() + my, currentFloorNumber));
+		} else {
+			heroContainer.moveHero(floorContainer.getFloor(currentFloorNumber - 1), mx, my);
+		}
+		creatureContainer.update(floorContainer);
 	}
 	
 	public void descend() {
@@ -44,15 +48,15 @@ public class World {
         top = getScrollY();
         
         floorContainer.displayTiles(terminal, left, top, screenWidth, screenHeight, currentFloorNumber);
-        creatureContainer.displayCreatures(terminal, left, top, currentFloorNumber);
+        creatureContainer.displayCreatures(terminal, left, top, screenWidth, screenHeight, currentFloorNumber);
         heroContainer.displayHero(terminal, left, top);
 	}
 	
-	public int getScrollX() {
+	private int getScrollX() {
         return Math.max(0, Math.min(heroContainer.getHeroX() - screenWidth / 2, floorContainer.getFloor(currentFloorNumber - 1).getWidth() - screenWidth));
     }
     
-    public int getScrollY() {
+    private int getScrollY() {
         return Math.max(0, Math.min(heroContainer.getHeroY() - screenHeight / 2, floorContainer.getFloor(currentFloorNumber - 1).getHeight() - screenHeight));
     }
 	

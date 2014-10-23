@@ -2,6 +2,7 @@ package creature;
 
 import java.awt.Color;
 
+import ai.CreatureAi;
 import world.FloorContainer;
 
 public class Creature {
@@ -11,22 +12,13 @@ public class Creature {
     
     private CreatureAi ai;
     private CreatureEnum creatureEnum;
-    private DirectionEnum directionEnum;
     
     public Creature(CreatureEnum creatureEnum) {
     	this.creatureEnum = creatureEnum;
-    	ai = new CreatureAi();
+    	ai = new CreatureAi(creatureEnum);
     }
-    
-	public void move(FloorContainer floorContainer) {
-    	do {
-    		directionEnum = ai.move();
-    	} while (!floorContainer.getFloor(z - 1).getTile(x + directionEnum.getX(), y + directionEnum.getY() - 1).isGround());
-    	x += directionEnum.getX();
-    	y += directionEnum.getY();
-    }
-    
-    public int getX() {
+
+	public int getX() {
 		return x;
 	}
 
@@ -49,6 +41,10 @@ public class Creature {
 	public void setZ(int z) {
 		this.z = z;
 	}
+	
+	public CreatureAi getAi() {
+		return ai;
+	}
 
 	public char getGlyph() {
 		return creatureEnum.getGlyph();
@@ -66,5 +62,6 @@ public class Creature {
 		return creatureEnum.getDescription();
 	}
 
+	
 
 }

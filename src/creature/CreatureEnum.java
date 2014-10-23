@@ -3,7 +3,8 @@ package creature;
 import java.awt.Color;
 
 public enum CreatureEnum {
-	GOBLIN ("Green and mean", 'g', Color.GREEN);
+	GOBLIN ("Green and mean", 'g', Color.GREEN),
+	FUNGUS ("Green and not mean", 'f', Color.GREEN);
 	
 	private final String description;
 	private final char glyph;
